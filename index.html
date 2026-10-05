@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-title-zh="Li Li 博士">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,7 +7,7 @@
 <meta name="description" content="Li Li is a cancer biologist and AI builder using multimodal biological and clinical data to design better drug screens and predict treatment response.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@500;600&family=Source+Sans+3:wght@400;600&family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap">
 <style>
 /* Layout: a single warm dusk. A fixed long-exposure sunset over water sits behind everything; content arrives on cream paper cards and polaroids that float over it. */
 :root {
@@ -31,9 +31,9 @@
   --rose-bg: #F0D2C8; --rose: #A9452F;
   --lw-violet: #8052FF; --lw-amber: #FFB829; --lw-teal: #15846E;
 
-  --f-serif: "Lora", "Iowan Old Style", Georgia, serif;
-  --f-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
-  --f-ui: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-serif: "Lora", "Iowan Old Style", Georgia, "Noto Serif SC", "Songti SC", serif;
+  --f-hand: "Caveat", "Bradley Hand", "Segoe Print", "Ma Shan Zheng", "Kaiti SC", cursive;
+  --f-ui: "Source Sans 3", "Segoe UI", system-ui, "PingFang SC", "Noto Sans SC", sans-serif;
 
   --s-hero: clamp(3.75rem, 12vw, 8.5rem);
   --s-h2: clamp(2.25rem, 5vw, 3.25rem);
@@ -78,11 +78,16 @@ p { margin: 0; }
 /* Nav */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; transition: background .3s, backdrop-filter .3s; }
 .top.scrolled { background: rgba(70, 48, 34, .55); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); box-shadow: 0 1px 0 rgba(247, 236, 218, .12); }
-.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 76px; }
+.top .wrap { display: flex; align-items: center; gap: 20px; min-height: 76px; }
+.nav { margin-left: auto; }
+.top-tools { display: flex; align-items: center; gap: 10px; }
+@media (max-width: 860px) { .top-tools { margin-left: auto; } }
 .brand { font-size: 1.6rem; font-weight: 600; text-decoration: none; color: var(--on-sky); }
 .nav { display: flex; gap: clamp(16px, 2.6vw, 36px); flex-wrap: wrap; }
 .nav a { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--on-sky-soft); padding-block: 4px; border-bottom: 1px solid transparent; }
 .nav a:hover, .nav a.on { color: var(--on-sky); border-bottom-color: var(--on-sky); }
+.lang-btn { font: 600 .8rem var(--f-ui); letter-spacing: .08em; color: var(--on-sky); background: rgba(40, 25, 18, .25); border: 1px solid rgba(247,236,218,.55); border-radius: 999px; padding: 6px 14px; cursor: pointer; transition: background .2s, border-color .2s; }
+.lang-btn:hover { background: var(--rust); border-color: var(--rust); }
 .menu-btn { display: none; font: 500 .8rem var(--f-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--on-sky); background: none; border: 1px solid rgba(247,236,218,.5); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
 @media (max-width: 860px) {
   .menu-btn { display: inline-block; }
@@ -193,6 +198,11 @@ section.sec { padding-block: clamp(56px, 9vw, 112px); }
 .story .hand { font-size: 1.6rem; color: var(--rust); line-height: 1; }
 .story h3 { font-size: var(--s-h3); }
 .story p { font-size: .98rem; }
+a.story { text-decoration: none; color: var(--ink); transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s; }
+a.story:hover { transform: translateY(-4px); box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 26px 50px rgba(25, 12, 6, .38); }
+.story .more { font-family: var(--f-ui); font-weight: 600; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--rust); margin-top: 4px; }
+a.story:hover .more { color: var(--rust-hi); }
+.story .soon { font-family: var(--f-ui); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-top: 4px; }
 .story .q { font-style: italic; border-left: 2px solid var(--sun); padding-left: 12px; color: var(--ink); }
 .carousel-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; color: var(--on-sky-soft); font-style: italic; }
 .arrows { display: flex; gap: 10px; }
@@ -242,7 +252,6 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
 <header class="top" id="top-bar">
   <div class="wrap">
     <a class="brand" href="#home">Li Li</a>
-    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Sections">
       <a href="#about">About</a>
       <a href="#research">Research</a>
@@ -251,6 +260,10 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
       <a href="#writing">Stories</a>
       <a href="#contact">Contact</a>
     </nav>
+    <div class="top-tools">
+      <button class="lang-btn" type="button" data-lang-btn data-no-i18n>中文</button>
+      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    </div>
   </div>
 </header>
 
@@ -265,7 +278,7 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
       <a class="btn rust" href="#research">The research →</a>
       <a class="btn ghost" href="#together">Build together</a>
     </div>
-    <div class="scroll-hint hand" aria-hidden="true">come on in ↓</div>
+    <p class="scroll-hint hand" aria-hidden="true">come on in ↓</p>
   </div>
 </section>
 
@@ -483,7 +496,7 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
   <div class="wrap">
     <div class="sec-head"><h2>Selected work</h2><p>Papers, preprints and work in progress</p></div>
     <div class="works">
-      <div class="paper work"><div class="when"><b>2026</b><span>Cancer Res</span></div><div><h3>BRD9 degraders unleash GBAF chromatin remodeling activity in synovial sarcoma</h3><p class="meta">Li J, Nelson ML, Li L, … Jones KB</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1158/0008-5472.CAN-25-5405" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2026</b><span>Cancer Res</span></div><div><h3>BRD9 degraders unleash GBAF chromatin remodeling activity in synovial sarcoma</h3><p class="meta">Li J, Nelson ML, Li L, … Jones KB</p></div><div class="end"><span class="pill sage">Co-first</span><a class="btn rust sm" href="https://doi.org/10.1158/0008-5472.CAN-25-5405" target="_blank" rel="noopener">Read →</a></div></div>
       <div class="paper work"><div class="when"><b>2026</b><span>Nat Commun</span></div><div><h3>Motixafortide, cemiplimab, gemcitabine and nab-paclitaxel in metastatic pancreatic cancer: a phase 2 study with single-cell correlatives</h3><p class="meta">Raufi AG, … Li L, … Manji GA</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1038/s41467-026-76559-4" target="_blank" rel="noopener">Read →</a></div></div>
       <div class="paper work"><div class="when"><b>2025</b><span>Nat Commun</span></div><div><h3>Synovial sarcoma reprograms transcription by GBAF activation of polycomb targets and loss of CBAF enhancers</h3><p class="meta">Li J*, Li L*, … Cairns BR, Jones KB</p></div><div class="end"><span class="pill sage">Co-first</span><a class="btn rust sm" href="https://doi.org/10.1038/s41467-025-67841-y" target="_blank" rel="noopener">Read →</a></div></div>
       <div class="paper work"><div class="when"><b>2025</b><span>JCI</span></div><div><h3>DNA demethylating agents suppress preclinical models of synovial sarcoma</h3><p class="meta">Hasegawa N, … Li L, … Jones KB</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1172/JCI190855" target="_blank" rel="noopener">Read →</a></div></div>
@@ -500,11 +513,11 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
   <div class="wrap">
     <div class="sec-head"><h2>Writing &amp; stories</h2><p>Notes on science, tools and the people who make them work</p></div>
     <div class="carousel" id="carousel" tabindex="0" aria-label="Story themes, scroll sideways">
-      <article class="paper story torn"><span class="hand">field notes</span><h3>AI in the lab, for real</h3><p>What actually changes when a research team adopts agents: the wins, the failure modes, and the habits that keep results reproducible.</p></article>
-      <article class="paper story torn"><span class="hand">builder's log</span><h3>Designing for compounding</h3><p>Lessons from building tools that improve with use, and from shipping alone without cutting the corners that matter.</p></article>
-      <article class="paper story torn"><span class="hand">unlikely paths</span><h3>From veterinary medicine to code</h3><p>Career pivots, the mentors who opened doors, and what each field taught me about the next one.</p></article>
-      <article class="paper story torn"><span class="hand">people</span><h3>Connecting the overlaps</h3><p>Stories of collaborations that started with an introduction, and the small habits that turn strangers into teammates.</p></article>
-      <article class="paper story torn"><span class="hand">bench to bedside</span><h3>Rare cancers, real patients</h3><p>Why sarcoma research matters, told through the questions patients and clinicians bring to the lab.</p></article>
+      <a class="paper story torn link" href="stories/ai-in-the-lab.html"><span class="hand">field notes</span><h3>AI in the lab, for real</h3><p>What actually changes when a research team adopts agents: the wins, the failure modes, and the habits that keep results reproducible.</p><span class="more">Read the story →</span></a>
+      <article class="paper story torn"><span class="hand">builder's log</span><h3>Designing for compounding</h3><p>Lessons from building tools that improve with use, and from shipping alone without cutting the corners that matter.</p><span class="soon">Coming soon</span></article>
+      <article class="paper story torn"><span class="hand">unlikely paths</span><h3>From veterinary medicine to code</h3><p>Career pivots, the mentors who opened doors, and what each field taught me about the next one.</p><span class="soon">Coming soon</span></article>
+      <article class="paper story torn"><span class="hand">people</span><h3>Connecting the overlaps</h3><p>Stories of collaborations that started with an introduction, and the small habits that turn strangers into teammates.</p><span class="soon">Coming soon</span></article>
+      <article class="paper story torn"><span class="hand">bench to bedside</span><h3>Rare cancers, real patients</h3><p>Why sarcoma research matters, told through the questions patients and clinicians bring to the lab.</p><span class="soon">Coming soon</span></article>
     </div>
     <div class="carousel-foot">
       <span>New essays land at <a href="https://www.selfai.cc" target="_blank" rel="noopener">selfai.cc</a></span>
@@ -608,12 +621,13 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
   var btn = document.getElementById("copy");
   btn.addEventListener("click", function () {
     var mail = document.getElementById("email");
-    function done(m) { btn.textContent = m; setTimeout(function () { btn.textContent = "Copy"; }, 1800); }
-    function fallback() { var rg = document.createRange(); rg.selectNodeContents(mail); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rg); done("Selected"); }
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(mail.textContent).then(function () { done("Copied"); }, fallback);
+    function done(m) { btn.textContent = m; setTimeout(function () { btn.textContent = i18n.t("Copy"); }, 1800); }
+    function fallback() { var rg = document.createRange(); rg.selectNodeContents(mail); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rg); done(i18n.t("Selected")); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(mail.textContent).then(function () { done(i18n.t("Copied")); }, fallback);
     else fallback();
   });
 })();
 </script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>
