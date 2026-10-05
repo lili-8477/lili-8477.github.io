@@ -119,6 +119,8 @@ section.sec { padding-block: clamp(56px, 9vw, 112px); }
 .polaroid:hover { transform: rotate(0deg) translateY(-4px) !important; }
 .polaroid .shot { aspect-ratio: 4 / 4.4; width: 100%; max-width: 100%; overflow: hidden; border-radius: 1px; position: relative; background: #2a2a2a; }
 .polaroid .shot.wide { aspect-ratio: 4 / 3; }
+.polaroid .shot.figure { aspect-ratio: auto; display: block; background: transparent; cursor: zoom-in; }
+.polaroid .shot.figure > img { height: auto; object-fit: contain; }
 .polaroid .shot > svg, .polaroid .shot > canvas, .polaroid .shot > img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .polaroid figcaption { font-family: var(--f-hand); font-size: 1.45rem; color: #5B4F46; text-align: center; padding: 8px 4px 6px; line-height: 1.2; }
 .tilt-l { transform: rotate(-2.2deg); } .tilt-r { transform: rotate(1.8deg); } .tilt-s { transform: rotate(-.8deg); }
@@ -340,15 +342,15 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
     <div class="gallery">
       <div>
         <figure class="polaroid tilt-l">
-          <div class="shot"><canvas id="spatial" width="800" height="880" role="img" aria-label="Illustrative spatial map of a tumour section: tumour nests, immune cells gathered at their margins, fibroblast-rich stroma and blood vessels"></canvas></div>
+          <a class="shot figure" href="assets/xenium-tme.jpg" target="_blank" rel="noopener" title="Open full size"><img src="assets/xenium-tme.jpg" alt="Xenium spatial map of a synovial sarcoma section with cluster calls for monophasic (blue), epithelial and poorly differentiated (pink), glandular epithelial (green) and endothelial (purple) cells, with two enlarged insets" loading="lazy"></a>
           <figcaption>where every cell sits</figcaption>
         </figure>
         <p class="note">Mapping the spatial tumour microenvironment: where tumour, immune and stromal cells meet, and how those neighbourhoods shift under treatment.</p>
       </div>
       <div>
         <figure class="polaroid tilt-s">
-          <div class="shot"><canvas id="umap" width="800" height="880" role="img" aria-label="Illustrative single-cell map with clusters of tumor, immune and stromal cells"></canvas></div>
-          <figcaption>single cells, one tumor</figcaption>
+          <a class="shot figure" href="assets/scrna-umap.jpg" target="_blank" rel="noopener" title="Open full size"><img src="assets/scrna-umap.jpg" alt="Single-cell UMAP of synovial sarcoma cells coloured by pseudotime, with the inferred trajectory drawn as a black line" loading="lazy"></a>
+          <figcaption>single cells over pseudotime</figcaption>
         </figure>
         <p class="note">Reading tumors cell by cell: heterogeneity, immune context and response signatures.</p>
       </div>
@@ -595,56 +597,6 @@ footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em
   var menuBtn = document.getElementById("menu-btn"), nav = document.getElementById("nav");
   menuBtn.addEventListener("click", function () { var o = nav.classList.toggle("open"); menuBtn.setAttribute("aria-expanded", o); });
   links.forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }); });
-
-  // Polaroid 1: an illustrative spatial map of a tumour section, one dot per segmented cell.
-  var sp = document.getElementById("spatial"), x = sp.getContext("2d"), W = sp.width, H = sp.height;
-  x.fillStyle = "#1F2A2E"; x.fillRect(0, 0, W, H);
-  var nests = [[300, 300, 150], [560, 250, 105], [470, 560, 135], [200, 640, 85], [660, 690, 70]];
-  var vessels = [[[60, 470], [230, 440], [380, 430]], [[600, 420], [700, 470], [790, 520]], [[330, 820], [380, 760], [420, 700]]];
-  function tumourness(px, py) {
-    var f = 0;
-    nests.forEach(function (n) { var dx = px - n[0], dy = py - n[1]; f += Math.exp(-(dx * dx + dy * dy) / (2 * n[2] * n[2] * 0.45)); });
-    return f + (Math.sin(px * 0.031) * Math.cos(py * 0.027)) * 0.08;
-  }
-  var COL = { tumour: "#EE9A55", tumour2: "#D46F48", tcell: "#9EC3DE", macro: "#F0A7B4", caf: "#A9C192", vessel: "#C2413A", other: "#5E6E73" };
-  var sd = 7;
-  for (var gy = 8; gy < H; gy += 14) for (var gx = 8; gx < W; gx += 14) {
-    var px = gx + (rand(sd++) - 0.5) * 9, py = gy + (rand(sd++) - 0.5) * 9, f = tumourness(px, py), q = rand(sd++), col;
-    if (f > 0.62) col = q < 0.88 ? (q < 0.55 ? COL.tumour : COL.tumour2) : (q < 0.95 ? COL.tcell : COL.macro);
-    else if (f > 0.36) col = q < 0.38 ? COL.tcell : q < 0.66 ? COL.macro : q < 0.86 ? COL.caf : COL.tumour2;
-    else col = q < 0.3 ? COL.caf : q < 0.36 ? COL.macro : q < 0.4 ? COL.tcell : q < 0.55 ? COL.other : null;
-    if (!col) continue;
-    x.fillStyle = col; x.globalAlpha = f > 0.62 ? 0.95 : f > 0.36 ? 0.9 : 0.5;
-    x.beginPath(); x.ellipse(px, py, 5.2 + rand(sd++) * 1.6, 4.4 + rand(sd++) * 1.4, rand(sd++) * 3, 0, 6.283); x.fill();
-  }
-  x.globalAlpha = 1; x.strokeStyle = COL.vessel; x.lineCap = "round"; x.lineWidth = 11;
-  vessels.forEach(function (v) { x.beginPath(); x.moveTo(v[0][0], v[0][1]); x.quadraticCurveTo(v[1][0], v[1][1], v[2][0], v[2][1]); x.stroke(); });
-  x.fillStyle = "rgba(20, 26, 28, .78)"; x.fillRect(0, 790, W, 90);
-  x.font = "600 24px 'Source Sans 3', sans-serif";
-  [["tumour", COL.tumour], ["T cell", COL.tcell], ["macrophage", COL.macro], ["fibroblast", COL.caf], ["vessel", COL.vessel]].reduce(function (lx, it) {
-    x.fillStyle = it[1]; x.beginPath(); x.arc(lx + 9, 836, 9, 0, 6.283); x.fill();
-    x.fillStyle = "#E6D3BB"; x.fillText(it[0], lx + 26, 844); return lx + 40 + x.measureText(it[0]).width;
-  }, 34);
-
-  // Polaroid 2: an illustrative single-cell map.
-  var cv = document.getElementById("umap"), g = cv.getContext("2d");
-  g.fillStyle = "#26302F"; g.fillRect(0, 0, cv.width, cv.height);
-  var clusters = [
-    { x: 300, y: 320, sx: 90, sy: 70, n: 900, col: "#EE9A55" },
-    { x: 520, y: 260, sx: 70, sy: 90, n: 650, col: "#D46F48" },
-    { x: 560, y: 560, sx: 80, sy: 60, n: 600, col: "#9EB8C9" },
-    { x: 300, y: 620, sx: 70, sy: 55, n: 500, col: "#F0C58A" },
-    { x: 180, y: 470, sx: 40, sy: 40, n: 240, col: "#B5CDA0" },
-    { x: 650, y: 410, sx: 35, sy: 45, n: 200, col: "#F0D2C8" }
-  ];
-  var s = 1;
-  function nrm() { var u = rand(s++) || 1e-6, v = rand(s++); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-  clusters.forEach(function (k) {
-    g.fillStyle = k.col; g.globalAlpha = 0.75;
-    for (var i = 0; i < k.n; i++) { g.beginPath(); g.arc(k.x + nrm() * k.sx * 0.55, k.y + nrm() * k.sy * 0.55, 4.2, 0, 6.283); g.fill(); }
-  });
-  g.globalAlpha = 1; g.fillStyle = "#E6D3BB"; g.font = "600 28px 'Source Sans 3', sans-serif";
-  g.fillText("UMAP 1  →", 40, 840);
 
   // Story carousel arrows.
   var car = document.getElementById("carousel");
