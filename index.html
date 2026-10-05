@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Li Li, Ph.D.</title>
+<meta name="description" content="Li Li is a cancer biologist and AI builder using multimodal biological and clinical data to design better drug screens and predict treatment response.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: a single warm dusk. A fixed long-exposure sunset over water sits behind everything; content arrives on cream paper cards and polaroids that float over it. */
+:root {
+  --sky-top: #5B4130;
+  --sun: #EE9A55;
+  --ember: #D46F48;
+  --dusk: #8E4440;
+  --sea: #4F6F86;
+  --deep: #25282B;
+
+  --paper: #EFE6D4;
+  --paper-hi: #F8F2E7;
+  --ink: #2B221C;
+  --ink-soft: #6C5F55;
+  --rule: #D8CBB4;
+  --rust: #97472A;
+  --rust-hi: #B4593A;
+  --on-sky: #F7ECDA;
+  --on-sky-soft: #E6D3BB;
+  --sage-bg: #D5E2CB; --sage: #3E7448;
+  --rose-bg: #F0D2C8; --rose: #A9452F;
+  --lw-violet: #8052FF; --lw-amber: #FFB829; --lw-teal: #15846E;
+
+  --f-serif: "Lora", "Iowan Old Style", Georgia, serif;
+  --f-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+  --f-ui: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+
+  --s-hero: clamp(3.75rem, 12vw, 8.5rem);
+  --s-h2: clamp(2.25rem, 5vw, 3.25rem);
+  --s-h3: 1.4rem;
+  --gutter: clamp(16px, 4vw, 40px);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--deep);
+  color: var(--on-sky);
+  font-family: var(--f-serif);
+  font-size: 1.075rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+/* The long-exposure sky: fixed, painted once, the page scrolls over it. */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -2;
+  /* Close-up of sunset light on ocean water; a light warm scrim on the bright upper band keeps cream text readable. */
+  background:
+    linear-gradient(180deg, rgba(70, 38, 22, .42) 0%, rgba(70, 38, 22, .24) 38%, rgba(20, 28, 44, .08) 60%, rgba(10, 16, 28, .25) 100%),
+    url("assets/background.jpg") center 40% / cover no-repeat,
+    linear-gradient(180deg, #C98F5E, var(--sea));
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(140% 90% at 50% 40%, transparent 55%, rgba(20, 14, 10, .45));
+}
+
+a { color: inherit; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; border-radius: 3px; }
+h1, h2, h3 { font-family: var(--f-serif); font-weight: 600; line-height: 1.12; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-inline: var(--gutter); }
+.hand { font-family: var(--f-hand); }
+
+/* Nav */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; transition: background .3s, backdrop-filter .3s; }
+.top.scrolled { background: rgba(70, 48, 34, .55); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); box-shadow: 0 1px 0 rgba(247, 236, 218, .12); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 76px; }
+.brand { font-size: 1.6rem; font-weight: 600; text-decoration: none; color: var(--on-sky); }
+.nav { display: flex; gap: clamp(16px, 2.6vw, 36px); flex-wrap: wrap; }
+.nav a { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--on-sky-soft); padding-block: 4px; border-bottom: 1px solid transparent; }
+.nav a:hover, .nav a.on { color: var(--on-sky); border-bottom-color: var(--on-sky); }
+.menu-btn { display: none; font: 500 .8rem var(--f-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--on-sky); background: none; border: 1px solid rgba(247,236,218,.5); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+@media (max-width: 860px) {
+  .menu-btn { display: inline-block; }
+  .nav { display: none; position: absolute; top: 100%; left: var(--gutter); right: var(--gutter); flex-direction: column; gap: 0; background: var(--paper); border-radius: 6px; padding: 8px 18px; box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+  .nav.open { display: flex; }
+  .nav a { color: var(--ink); padding-block: 12px; border-bottom: 1px solid var(--rule); }
+  .nav a:last-child { border-bottom: 0; }
+}
+
+/* Hero */
+.hero { min-height: min(78vh, 760px); display: grid; place-items: center; text-align: center; padding-block: 40px 64px; }
+.hero h1 { font-size: var(--s-hero); font-weight: 700; letter-spacing: -.01em; color: #FBF3E4; text-shadow: 0 2px 30px rgba(60, 25, 10, .35); }
+.hero .sub { font-style: italic; font-size: clamp(1.15rem, 2.4vw, 1.5rem); color: var(--on-sky-soft); margin-top: 10px; }
+.hero .thesis { max-width: 34em; margin: 28px auto 0; font-size: 1.1rem; color: var(--on-sky); text-shadow: 0 1px 12px rgba(40, 20, 10, .45); }
+.hero .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+.btn { font-family: var(--f-ui); font-weight: 600; font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; padding: 12px 22px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px; transition: background .2s, transform .2s; }
+.btn.rust { background: var(--rust); color: #FBEFE3; }
+.btn.rust:hover { background: var(--rust-hi); transform: translateY(-1px); }
+.btn.ghost { color: var(--on-sky); border: 1px solid rgba(247,236,218,.6); }
+.btn.ghost:hover { background: rgba(247,236,218,.12); }
+.scroll-hint { margin-top: 48px; font-size: 1.35rem; color: var(--on-sky-soft); }
+
+/* Sections */
+section.sec { padding-block: clamp(56px, 9vw, 112px); }
+.sec-head { display: grid; gap: 6px; margin-bottom: 40px; padding-bottom: 22px; border-bottom: 1px solid rgba(247, 236, 218, .28); }
+.sec-head h2 { font-size: var(--s-h2); color: #FBF3E4; text-shadow: 0 2px 20px rgba(40, 20, 10, .35); }
+.sec-head p { font-style: italic; font-size: 1.2rem; color: var(--on-sky-soft); }
+
+/* Paper and polaroids */
+.paper { background: linear-gradient(170deg, var(--paper-hi), var(--paper) 60%); color: var(--ink); border-radius: 4px; box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 18px 40px rgba(25, 12, 6, .28); }
+.paper p { color: #3D322A; }
+.torn { border-radius: 0; }
+.polaroid { margin: 0; background: var(--paper-hi); padding: 12px 12px 4px; border-radius: 3px; box-shadow: 0 20px 44px rgba(25, 12, 6, .38); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.polaroid:hover { transform: rotate(0deg) translateY(-4px) !important; }
+.polaroid .shot { aspect-ratio: 4 / 4.4; width: 100%; max-width: 100%; overflow: hidden; border-radius: 1px; position: relative; background: #2a2a2a; }
+.polaroid .shot.wide { aspect-ratio: 4 / 3; }
+.polaroid .shot > svg, .polaroid .shot > canvas, .polaroid .shot > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.polaroid figcaption { font-family: var(--f-hand); font-size: 1.45rem; color: #5B4F46; text-align: center; padding: 8px 4px 6px; line-height: 1.2; }
+.tilt-l { transform: rotate(-2.2deg); } .tilt-r { transform: rotate(1.8deg); } .tilt-s { transform: rotate(-.8deg); }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .85fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.about-photos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: start; }
+.about-photos .p-lab { grid-column: 2 / 7; position: relative; z-index: 2; }
+.about-photos .p-ski { grid-column: 1 / 6; margin-top: -36px; position: relative; z-index: 1; }
+.about-photos .p-kids { grid-column: 2 / 7; margin-top: 4px; position: relative; z-index: 3; }
+.about-photos .polaroid:hover { z-index: 5; }
+@media (max-width: 820px) { .about-grid { grid-template-columns: minmax(0, 1fr); } .about-photos { max-width: 420px; width: 100%; justify-self: center; } }
+.about-card { padding: clamp(26px, 4vw, 44px); display: grid; gap: 18px; }
+.about-card .sig { font-family: var(--f-hand); font-size: 1.9rem; color: var(--rust); margin-top: 4px; }
+.path { list-style: none; margin: 8px 0 0; padding: 18px 0 0; border-top: 1px dashed var(--rule); display: grid; gap: 10px; }
+.path li { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; font-size: .98rem; color: #3D322A; }
+.path .yr { font-family: var(--f-ui); font-size: .82rem; letter-spacing: .06em; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding-top: 3px; }
+@media (max-width: 480px) { .path li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+/* Research */
+.lede-card { padding: clamp(24px, 4vw, 40px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 48px; }
+.lede-card h3 { font-size: 1.6rem; grid-column: 1 / -1; }
+.lede-card .goal { font-style: italic; font-size: 1.12rem; color: var(--rust); border-left: 2px solid var(--sun); padding-left: 16px; align-self: center; }
+@media (max-width: 760px) { .lede-card { grid-template-columns: minmax(0, 1fr); } }
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(22px, 4vw, 44px); margin-block: 48px; }
+@media (max-width: 820px) { .gallery { grid-template-columns: minmax(0, 1fr); max-width: 380px; margin-inline: auto; } }
+.gallery .note { font-size: .98rem; color: var(--on-sky); margin-top: 16px; text-shadow: 0 1px 10px rgba(30, 15, 8, .5); }
+.studies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 720px) { .studies { grid-template-columns: minmax(0, 1fr); } }
+.study { padding: 22px 24px; display: grid; gap: 6px; align-content: start; }
+.study .gene { font-family: var(--f-ui); font-weight: 600; font-size: .85rem; letter-spacing: .08em; color: var(--rust); text-transform: uppercase; }
+.study p { font-size: .98rem; }
+
+/* Building */
+.builds { display: grid; gap: 36px; }
+.build { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(24px, 4vw, 52px); align-items: center; }
+.build.flip { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
+.build.flip .polaroid { order: 2; }
+@media (max-width: 820px) { .build, .build.flip { grid-template-columns: minmax(0, 1fr); } .build .polaroid, .build.flip .polaroid { order: 0; max-width: 360px; justify-self: center; } }
+.build .paper { padding: clamp(24px, 4vw, 38px); display: grid; gap: 14px; }
+.build .kicker { font-family: var(--f-ui); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.build h3 { font-size: 2rem; }
+.build ul { margin: 0; padding-left: 1.1em; color: #3D322A; display: grid; gap: 6px; font-size: .98rem; }
+.build ul li::marker { color: var(--rust); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font-family: var(--f-ui); font-size: .78rem; padding: 3px 11px; border-radius: 999px; background: rgba(151, 71, 42, .1); color: var(--rust); }
+
+/* Selected work: styled like a list of dates */
+.works { display: grid; gap: 14px; }
+.work { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 8px 22px; align-items: center; padding: 18px 22px; }
+.work .when { display: grid; line-height: 1.05; }
+.work .when b { font-size: 1.7rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.work .when span { font-family: var(--f-ui); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.work h3 { font-size: 1.08rem; font-weight: 600; line-height: 1.35; }
+.work .meta { font-size: .92rem; color: var(--ink-soft); }
+.work .end { display: flex; align-items: center; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.pill { font-family: var(--f-ui); font-size: .78rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; white-space: nowrap; }
+.pill.sage { background: var(--sage-bg); color: var(--sage); }
+.pill.rose { background: var(--rose-bg); color: var(--rose); }
+.btn.sm { padding: 9px 16px; font-size: .74rem; }
+@media (max-width: 700px) {
+  .work { grid-template-columns: 70px minmax(0, 1fr); }
+  .work .end { grid-column: 2; justify-content: flex-start; }
+}
+.works-note { margin-top: 18px; font-style: italic; color: var(--on-sky-soft); font-size: .98rem; }
+
+/* Writing: torn paper carousel */
+.carousel { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(270px, 1fr); gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 14px 4px 26px; scrollbar-color: rgba(247,236,218,.4) transparent; }
+.story { scroll-snap-align: start; padding: 30px 26px 34px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.story .hand { font-size: 1.6rem; color: var(--rust); line-height: 1; }
+.story h3 { font-size: var(--s-h3); }
+.story p { font-size: .98rem; }
+.story .q { font-style: italic; border-left: 2px solid var(--sun); padding-left: 12px; color: var(--ink); }
+.carousel-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; color: var(--on-sky-soft); font-style: italic; }
+.arrows { display: flex; gap: 10px; }
+.arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(247,236,218,.55); background: rgba(40, 25, 18, .25); color: var(--on-sky); font-size: 1.1rem; cursor: pointer; }
+.arrow:hover { background: var(--rust); border-color: var(--rust); }
+
+/* Collaborate */
+.together { padding: clamp(30px, 5vw, 56px); display: grid; gap: 28px; position: relative; }
+.together h2 { font-size: var(--s-h2); }
+.together h2 .hand { color: var(--rust); font-size: 1.15em; font-weight: 600; }
+.asks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 820px) { .asks { grid-template-columns: minmax(0, 1fr); } }
+.ask { display: grid; gap: 8px; align-content: start; padding-top: 16px; border-top: 1px dashed var(--rule); }
+.ask .ico { width: 40px; height: 40px; }
+.ask h3 { font-size: 1.2rem; }
+.ask p { font-size: .97rem; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 28px; align-items: start; }
+@media (max-width: 820px) { .contact { grid-template-columns: minmax(0, 1fr); } }
+.contact .paper { padding: clamp(26px, 4vw, 40px); display: grid; gap: 16px; }
+.contact h3 { font-size: 1.7rem; }
+.email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; background: rgba(255,255,255,.55); border: 1px solid var(--rule); border-radius: 999px; }
+.email { font-size: 1.15rem; font-weight: 600; word-break: break-all; user-select: all; text-decoration: none; flex: 1; min-width: 0; padding-left: 6px; }
+.copy { font-family: var(--f-ui); font-weight: 600; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; border: 0; border-radius: 999px; background: var(--rust); color: #FBEFE3; padding: 9px 16px; cursor: pointer; }
+.copy:hover { background: var(--rust-hi); }
+.links { list-style: none; margin: 0; padding: 0; display: grid; }
+.links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 14px 4px; border-bottom: 1px dashed var(--rule); text-decoration: none; }
+.links li:last-child a { border-bottom: 0; }
+.links .k { font-weight: 600; }
+.links .v { font-family: var(--f-ui); font-size: .85rem; color: var(--ink-soft); overflow-wrap: anywhere; text-align: right; }
+.links a:hover .k { color: var(--rust); }
+
+footer { padding-block: 40px 56px; text-align: center; color: var(--on-sky-soft); }
+footer .hand { font-size: 1.7rem; color: var(--on-sky); display: block; }
+footer small { font-family: var(--f-ui); font-size: .8rem; letter-spacing: .08em; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+  .rise.d1 { animation-delay: .12s; } .rise.d2 { animation-delay: .24s; } .rise.d3 { animation-delay: .36s; }
+  @keyframes rise { from { transform: translateY(12px); } to { transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<header class="top" id="top-bar">
+  <div class="wrap">
+    <a class="brand" href="#home">Li Li</a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#building">Building</a>
+      <a href="#work">Work</a>
+      <a href="#writing">Stories</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="home">
+
+<section class="hero">
+  <div class="wrap">
+    <h1 class="rise">Li Li</h1>
+    <p class="sub rise d1">Cancer biology, AI building &amp; stories</p>
+    <p class="thesis rise d2">I turn multimodal biological and clinical data into AI models that identify the therapeutic targets that matter and predict how tumours respond to treatment. I also build software that helps people and teams stay aligned around shared context, knowledge, and goals, tools designed to last, evolve, and become more useful over time.</p>
+    <div class="actions rise d3">
+      <a class="btn rust" href="#research">The research →</a>
+      <a class="btn ghost" href="#together">Build together</a>
+    </div>
+    <div class="scroll-hint hand" aria-hidden="true">come on in ↓</div>
+  </div>
+</section>
+
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="sec-head"><h2>About</h2><p>From the real world to the terminal, and back again</p></div>
+    <div class="about-grid">
+      <div class="paper about-card torn">
+        <p>I'm a research scientist at the Huntsman Cancer Institute, University of Utah, where I lead computational biology on multimodal sequencing studies of fusion-driven sarcomas. My path started in veterinary medicine, ran through a Ph.D. in molecular biology and years of bench work on how cancers rewire cells, and led me to build the computational systems that make sense of what we measure.</p>
+        <p>I care about ideas that survive contact with real patients and real labs: analyses others can rerun, tools teams keep using, and models that change which experiment we run next. I love sharing what I learn and introducing people who should know each other.</p>
+        <ol class="path">
+          <li><span class="yr">2019 to now</span><span>Research Scientist / Engineer, Huntsman Cancer Institute</span></li>
+          <li><span class="yr">2019 to 2023</span><span>M.S. Analytics, Georgia Institute of Technology</span></li>
+          <li><span class="yr">2016 to 2019</span><span>Postdoctoral training at UTHealth, Baylor College of Medicine and UTMB</span></li>
+          <li><span class="yr">2009 to 2015</span><span>Ph.D. Molecular Biology, China Agricultural University</span></li>
+          <li><span class="yr">2004 to 2009</span><span>Bachelor of Veterinary Medicine, China Agricultural University</span></li>
+        </ol>
+        <p class="sig">Li</p>
+      </div>
+      <div class="about-photos">
+        <figure class="polaroid tilt-r p-lab">
+          <div class="shot"><img src="assets/photo-3.jpg" alt="Li Li in a white lab coat at the lab" style="object-position: 50% 30%"></div>
+          <figcaption>at the bench</figcaption>
+        </figure>
+        <figure class="polaroid tilt-s p-ski">
+          <div class="shot wide"><img src="assets/photo-2.jpg" alt="Li Li and three friends in ski gear on a snowy ridge at sunset"></div>
+          <figcaption>ski days with friends</figcaption>
+        </figure>
+        <figure class="polaroid tilt-l p-kids">
+          <div class="shot wide" id="portrait-shot">
+            <img src="assets/portrait.jpg" alt="Two kids in ski gear sitting in the snow, looking up at a snow-covered mountain under a blue sky" style="object-position: 60% 50%" onerror="this.remove();document.getElementById('portrait-art').hidden=false">
+            <svg id="portrait-art" hidden viewBox="0 0 400 440" role="img" aria-label="Illustration of a desk by a window at sunset, with a laptop, a flask and a notebook">
+              <defs>
+                <linearGradient id="pw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98F5E"/><stop offset=".55" stop-color="#EE9A55"/><stop offset=".78" stop-color="#8E4440"/><stop offset=".8" stop-color="#4F6F86"/><stop offset="1" stop-color="#3C4954"/></linearGradient>
+              </defs>
+              <rect width="400" height="440" fill="#E9D9BE"/>
+              <rect x="60" y="40" width="280" height="220" rx="6" fill="url(#pw)"/>
+              <circle cx="200" cy="168" r="30" fill="#FFD9A8" opacity=".85"/>
+              <path d="M200 40v220M60 150h280" stroke="#E9D9BE" stroke-width="8"/>
+              <rect x="60" y="40" width="280" height="220" rx="6" fill="none" stroke="#B89A75" stroke-width="10"/>
+              <rect x="0" y="300" width="400" height="140" fill="#9A6A48"/>
+              <rect x="0" y="296" width="400" height="10" fill="#B88460"/>
+              <rect x="96" y="240" width="140" height="58" rx="4" fill="#2B221C"/>
+              <rect x="104" y="247" width="124" height="44" rx="2" fill="#3E5568"/>
+              <path d="M112 268l18-8 16 12 18-14 18 8 20-6" stroke="#FFB829" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <rect x="80" y="296" width="172" height="8" rx="3" fill="#2B221C"/>
+              <path d="M286 234h18v26l20 36h-58l20-36z" fill="#F7ECDA" opacity=".9"/>
+              <path d="M272 286l14-24h18l14 24z" fill="#D46F48" opacity=".9"/>
+              <rect x="282" y="226" width="26" height="8" rx="2" fill="#B89A75"/>
+              <rect x="300" y="318" width="70" height="46" rx="3" fill="#F7ECDA" transform="rotate(-8 335 341)"/>
+              <path d="M310 332h46M310 342h36" stroke="#B89A75" stroke-width="3" transform="rotate(-8 335 341)"/>
+              <path d="M40 330c10-30 40-40 40-40" stroke="#5E7A4E" stroke-width="5" fill="none"/>
+              <ellipse cx="72" cy="290" rx="16" ry="8" fill="#6F8E5A" transform="rotate(-30 72 290)"/>
+              <rect x="30" y="326" width="30" height="34" rx="4" fill="#B4593A"/>
+            </svg>
+          </div>
+          <figcaption>Salt Lake City, Utah</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="research">
+  <div class="wrap">
+    <div class="sec-head"><h2>Research</h2><p>From tissue and single cells to treatment response</p></div>
+
+    <div class="paper lede-card">
+      <h3>Understanding tumour evolution, predicting treatment response.</h3>
+      <p>I use mouse models to follow how tumours grow, change, and respond to treatment. I bring together imaging, pathology, single-cell and spatial data, and molecular profiling to build AI models that identify critical targets and predict drug response.</p>
+      <p class="goal">The goal is simple: test better ideas earlier and more precisely: what to target, which drug to use, and when resistance may emerge.</p>
+    </div>
+
+    <div class="gallery">
+      <div>
+        <figure class="polaroid tilt-l">
+          <div class="shot"><canvas id="spatial" width="800" height="880" role="img" aria-label="Illustrative spatial map of a tumour section: tumour nests, immune cells gathered at their margins, fibroblast-rich stroma and blood vessels"></canvas></div>
+          <figcaption>where every cell sits</figcaption>
+        </figure>
+        <p class="note">Mapping the spatial tumour microenvironment: where tumour, immune and stromal cells meet, and how those neighbourhoods shift under treatment.</p>
+      </div>
+      <div>
+        <figure class="polaroid tilt-s">
+          <div class="shot"><canvas id="umap" width="800" height="880" role="img" aria-label="Illustrative single-cell map with clusters of tumor, immune and stromal cells"></canvas></div>
+          <figcaption>single cells, one tumor</figcaption>
+        </figure>
+        <p class="note">Reading tumors cell by cell: heterogeneity, immune context and response signatures.</p>
+      </div>
+      <div>
+        <figure class="polaroid tilt-r">
+          <div class="shot"><svg viewBox="0 0 400 440" role="img" aria-label="Illustration of enhancer loops arching over a stretch of chromatin">
+            <rect width="400" height="440" fill="#2F3B45"/>
+            <g fill="none" stroke-linecap="round">
+              <path d="M70 300 C 90 120, 230 120, 250 300" stroke="#EE9A55" stroke-width="4"/>
+              <path d="M110 300 C 125 190, 205 190, 220 300" stroke="#F0C58A" stroke-width="3" opacity=".8"/>
+              <path d="M160 300 C 190 80, 330 80, 340 300" stroke="#D46F48" stroke-width="4"/>
+              <path d="M250 300 C 262 230, 318 230, 330 300" stroke="#9EB8C9" stroke-width="3"/>
+            </g>
+            <path d="M24 300 H 376" stroke="#F7ECDA" stroke-width="5" stroke-linecap="round"/>
+            <g fill="#F7ECDA"><rect x="62" y="290" width="18" height="20" rx="3"/><rect x="152" y="290" width="18" height="20" rx="3"/><rect x="242" y="290" width="18" height="20" rx="3"/><rect x="330" y="290" width="18" height="20" rx="3"/></g>
+            <g transform="translate(200 120)">
+              <polygon points="0,-26 22.5,-13 22.5,13 0,26 -22.5,13 -22.5,-13" fill="#8E4440" stroke="#F7ECDA" stroke-width="2"/>
+              <circle r="8" fill="#FFD9A8"/>
+            </g>
+            <text x="200" y="370" text-anchor="middle" font-family="Source Sans 3, sans-serif" font-size="15" letter-spacing="3" fill="#E6D3BB">ENHANCER · HUB · PROMOTER</text>
+          </svg></div>
+          <figcaption>loops around a hub</figcaption>
+        </figure>
+        <p class="note">Mechanism first: how fusion oncoproteins rewire chromatin and where drugs can push back.</p>
+      </div>
+    </div>
+
+    <div class="studies">
+      <div class="paper study"><span class="gene">SS18::SSX</span><p>How synovial sarcoma activates GBAF at polycomb targets and loses CBAF enhancers, and how BRD9 degraders and DNA demethylating agents push back.</p></div>
+      <div class="paper study"><span class="gene">ASPSCR1::TFE3</span><p>Enhancer loops organized around hexameric VCP/p97 in alveolar soft part sarcoma, a structural route to new drug targets.</p></div>
+      <div class="paper study"><span class="gene">EWSR1::ATF1</span><p>The clear cell sarcoma transcriptome, mapped in human tumors and a mouse genetic model.</p></div>
+      <div class="paper study"><span class="gene">Clinical trials</span><p>Single-cell correlative analysis of tumor and immune response in phase 2 trials for metastatic pancreatic cancer.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="building">
+  <div class="wrap">
+    <div class="sec-head"><h2>Building</h2><p>Tools that endure, improve over time and compound</p></div>
+    <div class="builds">
+
+      <div class="build">
+        <figure class="polaroid tilt-l">
+          <div class="shot wide"><svg viewBox="0 0 400 300" role="img" aria-label="LabWeaver mark with three teammates connected to one shared memory">
+            <rect width="400" height="300" fill="#0E0B16"/>
+            <circle cx="200" cy="120" r="70" fill="#8052FF" opacity=".18"/>
+            <g transform="translate(160 66) scale(.24)" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M219.05,359.00 Q200.00,370.00 180.95,359.00 L71.83,296.00 Q52.78,285.00 52.78,263.00 L52.78,137.00 Q52.78,115.00 71.83,104.00 L180.95,41.00 Q200.00,30.00 219.05,41.00 L328.17,104.00 Q347.22,115.00 347.22,137.00 L347.22,263.00 Q347.22,285.00 328.17,296.00 Z" stroke-width="16"/>
+              <path d="M96,138 C150,138 150,262 200,262 C250,262 250,138 304,138" stroke-width="16"/>
+              <path d="M96,262 C150,262 150,138 200,138 C250,138 250,262 304,262" stroke-width="16"/>
+              <circle cx="200" cy="200" r="18" fill="#FFFFFF" stroke="none"/>
+            </g>
+            <g fill="none" stroke="#8052FF" stroke-width="2" stroke-dasharray="5 7">
+              <path d="M90 230 C 120 190, 150 170, 180 160"/><path d="M200 236 V 182"/><path d="M310 230 C 280 190, 250 170, 220 160"/>
+            </g>
+            <g><circle cx="90" cy="236" r="13" fill="#8052FF"/><circle cx="200" cy="244" r="13" fill="#FFB829"/><circle cx="310" cy="236" r="13" fill="#15846E"/></g>
+            <g fill="#F7ECDA"><circle cx="86" cy="234" r="2"/><circle cx="94" cy="234" r="2"/><circle cx="196" cy="242" r="2"/><circle cx="204" cy="242" r="2"/><circle cx="306" cy="234" r="2"/><circle cx="314" cy="234" r="2"/></g>
+          </svg></div>
+          <figcaption>one context, the whole lab</figcaption>
+        </figure>
+        <div class="paper">
+          <span class="kicker">AI for teams · open source</span>
+          <h3>LabWeaver</h3>
+          <p>Everyone on a research team briefs their own AI from scratch. LabWeaver gives the whole lab one shared memory: skills, protocols and instruments woven into infrastructure that compounds. It turns single-user coding agents into a multi-user hub where every finished analysis becomes a reusable skill.</p>
+          <ul>
+            <li>Shared memory and persistent skills across the team</li>
+            <li>Grounded in the lab's own instruments, samples and history</li>
+            <li>Built with Claude Agent SDK, Docker, Vue 3 and NATS</li>
+          </ul>
+          <div class="tags"><span class="tag">labweaver.ai</span><span class="tag">MIT licensed</span><span class="tag">Manuscript in prep</span></div>
+          <div><a class="btn rust sm" href="https://labweaver.ai" target="_blank" rel="noopener">Visit LabWeaver →</a></div>
+        </div>
+      </div>
+
+      <div class="build flip">
+        <figure class="polaroid tilt-r">
+          <div class="shot wide"><svg viewBox="0 0 400 300" role="img" aria-label="A compounding growth curve drawn on graph paper">
+            <rect width="400" height="300" fill="#F3EAD8"/>
+            <g stroke="#E0D1B6" stroke-width="1"><path d="M0 30H400M0 60H400M0 90H400M0 120H400M0 150H400M0 180H400M0 210H400M0 240H400M0 270H400"/><path d="M40 0V300M80 0V300M120 0V300M160 0V300M200 0V300M240 0V300M280 0V300M320 0V300M360 0V300"/></g>
+            <path d="M40 250 C 140 246, 220 232, 270 190 S 345 70, 362 34" fill="none" stroke="#97472A" stroke-width="5" stroke-linecap="round"/>
+            <path d="M40 250 L 362 168" fill="none" stroke="#6C5F55" stroke-width="2.5" stroke-dasharray="6 8"/>
+            <circle cx="362" cy="34" r="8" fill="#EE9A55" stroke="#97472A" stroke-width="3"/>
+            <text x="250" y="272" font-family="Caveat, cursive" font-size="26" fill="#6C5F55">a one-off demo</text>
+            <text x="150" y="120" font-family="Caveat, cursive" font-size="28" fill="#97472A">a tool that learns</text>
+          </svg></div>
+          <figcaption>value over time</figcaption>
+        </figure>
+        <div class="paper">
+          <span class="kicker">Independent studio</span>
+          <h3>selfai.cc</h3>
+          <p>My independent practice as an AI builder. A demo proves an idea once; a durable tool proves it every day. I design products that remember what they learn, get better with use, and become more valuable the longer people rely on them.</p>
+          <ul>
+            <li>Persistent memory and skills, so work accumulates instead of resetting</li>
+            <li>Small, reliable parts that compose into bigger systems</li>
+            <li>Shipped to real users early, then refined with them</li>
+          </ul>
+          <div><a class="btn rust sm" href="https://www.selfai.cc" target="_blank" rel="noopener">Visit selfai.cc →</a></div>
+        </div>
+      </div>
+
+      <div class="build">
+        <figure class="polaroid tilt-s">
+          <div class="shot wide"><svg viewBox="0 0 400 300" role="img" aria-label="A stack of labelled recipe cards for genomics analyses">
+            <rect width="400" height="300" fill="#4F6F86"/>
+            <g font-family="Source Sans 3, sans-serif" font-size="17" font-weight="600" fill="#2B221C">
+              <g transform="rotate(-7 200 150)"><rect x="70" y="58" width="250" height="150" rx="8" fill="#E6D3BB"/><text x="92" y="92">ATAC-seq</text></g>
+              <g transform="rotate(4 200 150)"><rect x="82" y="74" width="250" height="150" rx="8" fill="#F0D2C8"/><text x="104" y="108">scRNA-seq · Scanpy</text></g>
+              <g><rect x="76" y="96" width="250" height="150" rx="8" fill="#F8F2E7"/><text x="98" y="130">Fusion transcript FPKM</text>
+                <g stroke="#D8CBB4" stroke-width="3" stroke-linecap="round"><path d="M98 158H290M98 180H262M98 202H276"/></g>
+                <circle cx="296" cy="218" r="12" fill="#D46F48"/><path d="M290 218l4 4 8-8" stroke="#F8F2E7" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </g>
+            </g>
+          </svg></div>
+          <figcaption>recipes the lab can rerun</figcaption>
+        </figure>
+        <div class="paper">
+          <span class="kicker">Reusable agent skills</span>
+          <h3>Genomics skills library</h3>
+          <p>Recurring analyses packaged as auditable AI-agent skills that run the same way every time: ChIP-seq and ATAC-seq, single-cell RNA-seq, fusion transcript quantification, DESeq2 and GEO submission on HPC.</p>
+          <div class="tags"><span class="tag">Reproducible</span><span class="tag">Modular</span><span class="tag">HPC / SLURM</span><span class="tag">Docker</span></div>
+          <div><a class="btn rust sm" href="https://github.com/lili-8477" target="_blank" rel="noopener">See on GitHub →</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sec-head"><h2>Selected work</h2><p>Papers, preprints and work in progress</p></div>
+    <div class="works">
+      <div class="paper work"><div class="when"><b>2026</b><span>Cancer Res</span></div><div><h3>BRD9 degraders unleash GBAF chromatin remodeling activity in synovial sarcoma</h3><p class="meta">Li J, Nelson ML, Li L, … Jones KB</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1158/0008-5472.CAN-25-5405" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2026</b><span>Nat Commun</span></div><div><h3>Motixafortide, cemiplimab, gemcitabine and nab-paclitaxel in metastatic pancreatic cancer: a phase 2 study with single-cell correlatives</h3><p class="meta">Raufi AG, … Li L, … Manji GA</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1038/s41467-026-76559-4" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2025</b><span>Nat Commun</span></div><div><h3>Synovial sarcoma reprograms transcription by GBAF activation of polycomb targets and loss of CBAF enhancers</h3><p class="meta">Li J*, Li L*, … Cairns BR, Jones KB</p></div><div class="end"><span class="pill sage">Co-first</span><a class="btn rust sm" href="https://doi.org/10.1038/s41467-025-67841-y" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2025</b><span>JCI</span></div><div><h3>DNA demethylating agents suppress preclinical models of synovial sarcoma</h3><p class="meta">Hasegawa N, … Li L, … Jones KB</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1172/JCI190855" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2024</b><span>Nat Commun</span></div><div><h3>ASPSCR1-TFE3 reprograms transcription by organizing enhancer loops around hexameric VCP/p97</h3><p class="meta">Pozner A*, Li L*, Verma SP*, … Jones KB</p></div><div class="end"><span class="pill sage">Co-first</span><a class="btn rust sm" href="https://doi.org/10.1038/s41467-024-45280-5" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2023</b><span>Cancers</span></div><div><h3>EWSR1::ATF1 orchestrates the clear cell sarcoma transcriptome in human tumors and a mouse genetic model</h3><p class="meta">Ozenberger BB*, Li L*, … Jones KB</p></div><div class="end"><span class="pill sage">Co-first</span><a class="btn rust sm" href="https://doi.org/10.3390/cancers15245750" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>2021</b><span>Cancer Discov</span></div><div><h3>A role for SMARCB1 in synovial sarcomagenesis reveals that SS18-SSX induces canonical BAF destruction</h3><p class="meta">Li J, Mulvihill TS, Li L, … Jones KB</p></div><div class="end"><a class="btn rust sm" href="https://doi.org/10.1158/2159-8290.CD-20-1219" target="_blank" rel="noopener">Read →</a></div></div>
+      <div class="paper work"><div class="when"><b>Soon</b><span>In prep</span></div><div><h3>LabWeaver: advancing agentic data analysis in computational biology through context learning</h3><p class="meta">Li L, Fort G, Tan AC, Guo B</p></div><div class="end"><span class="pill rose">First author</span><a class="btn rust sm" href="https://github.com/lili-8477/labweaver" target="_blank" rel="noopener">Code →</a></div></div>
+    </div>
+    <p class="works-note">* equal contribution. Sixteen peer-reviewed papers in total, including Nature Communications, JCI, Cancer Discovery, PNAS and JCO Precision Oncology.</p>
+  </div>
+</section>
+
+<section class="sec" id="writing">
+  <div class="wrap">
+    <div class="sec-head"><h2>Writing &amp; stories</h2><p>Notes on science, tools and the people who make them work</p></div>
+    <div class="carousel" id="carousel" tabindex="0" aria-label="Story themes, scroll sideways">
+      <article class="paper story torn"><span class="hand">field notes</span><h3>AI in the lab, for real</h3><p>What actually changes when a research team adopts agents: the wins, the failure modes, and the habits that keep results reproducible.</p></article>
+      <article class="paper story torn"><span class="hand">builder's log</span><h3>Designing for compounding</h3><p>Lessons from building tools that improve with use, and from shipping alone without cutting the corners that matter.</p></article>
+      <article class="paper story torn"><span class="hand">unlikely paths</span><h3>From veterinary medicine to code</h3><p>Career pivots, the mentors who opened doors, and what each field taught me about the next one.</p></article>
+      <article class="paper story torn"><span class="hand">people</span><h3>Connecting the overlaps</h3><p>Stories of collaborations that started with an introduction, and the small habits that turn strangers into teammates.</p></article>
+      <article class="paper story torn"><span class="hand">bench to bedside</span><h3>Rare cancers, real patients</h3><p>Why sarcoma research matters, told through the questions patients and clinicians bring to the lab.</p></article>
+    </div>
+    <div class="carousel-foot">
+      <span>New essays land at <a href="https://www.selfai.cc" target="_blank" rel="noopener">selfai.cc</a></span>
+      <div class="arrows"><button class="arrow" type="button" id="prev" aria-label="Previous stories">←</button><button class="arrow" type="button" id="next" aria-label="Next stories">→</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="together">
+  <div class="wrap">
+    <div class="paper together torn">
+      <h2>Let's build <span class="hand">together</span></h2>
+      <p style="max-width:40em">Good science is a team sport, and so is good software. My best work has come from generous collaboration: sharing data, code and credit, and building systems that help a whole team move faster. If our interests overlap, I'd love to hear from you.</p>
+      <div class="asks">
+        <div class="ask">
+          <svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M15 6h10M17 6v10L8 32a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4L23 16V6" fill="none" stroke="#97472A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 27h17l2 4.5H9.5z" fill="#EE9A55"/></svg>
+          <h3>Translational research</h3>
+          <p>Drug screen design, multimodal response modeling, and single-cell and epigenomic analysis for sarcoma and beyond.</p>
+        </div>
+        <div class="ask">
+          <svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="14" r="6" fill="#8052FF"/><circle cx="9" cy="29" r="5" fill="#FFB829"/><circle cx="31" cy="29" r="5" fill="#15846E"/><path d="M12 26l5-7M28 26l-5-7M14 29h12" stroke="#97472A" stroke-width="2" stroke-dasharray="3 3"/></svg>
+          <h3>AI for research teams</h3>
+          <p>Agentic infrastructure, shared memory and reusable skills that make a lab's analyses reproducible and its knowledge last.</p>
+        </div>
+        <div class="ask">
+          <svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30c0-6 5-10 14-10s14 4 14 10" fill="#F0D2C8" stroke="#97472A" stroke-width="2.2"/><circle cx="13" cy="14" r="5" fill="#EE9A55"/><circle cx="27" cy="14" r="5" fill="#D46F48"/><path d="M18 9c1-2 3-2 4 0" stroke="#97472A" stroke-width="2" fill="none"/></svg>
+          <h3>Community</h3>
+          <p>Talks, workshops and gatherings that connect biologists, clinicians and builders around meaningful work.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec-head"><h2>Contact</h2><p>A question, a dataset or an idea? Write to me.</p></div>
+    <div class="contact">
+      <div class="paper">
+        <h3>Say hello</h3>
+        <p>I'm open to research collaborations, advising on AI for science, and speaking. I read every message.</p>
+        <div class="email-row">
+          <a class="email" id="email" href="mailto:lililee1024@gmail.com">lililee1024@gmail.com</a>
+          <button class="copy" id="copy" type="button">Copy</button>
+        </div>
+      </div>
+      <div class="paper" style="padding:12px 26px">
+        <ul class="links">
+          <li><a href="https://www.selfai.cc" target="_blank" rel="noopener"><span class="k">selfai.cc</span><span class="v">studio &amp; writing ↗</span></a></li>
+          <li><a href="https://labweaver.ai" target="_blank" rel="noopener"><span class="k">LabWeaver</span><span class="v">labweaver.ai ↗</span></a></li>
+          <li><a href="https://github.com/lili-8477" target="_blank" rel="noopener"><span class="k">GitHub</span><span class="v">lili-8477 ↗</span></a></li>
+          <li><a href="https://scholar.google.com/scholar?q=%22Li+L%22+%22Jones+KB%22+sarcoma" target="_blank" rel="noopener"><span class="k">Google Scholar</span><span class="v">publications ↗</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span class="hand">thanks for stopping by</span>
+  <small>© 2026 Li Li · Salt Lake City</small>
+</footer>
+
+<script>
+(function () {
+  // Torn paper: give each .torn card a hand-ripped top and bottom edge.
+  function rand(seed) { var x = Math.sin(seed * 91.17) * 43758.5453; return x - Math.floor(x); }
+  document.querySelectorAll(".torn").forEach(function (el, k) {
+    var n = 28, top = [], bot = [];
+    for (var i = 0; i <= n; i++) {
+      var x = (i / n * 100).toFixed(2) + "%";
+      top.push(x + " " + (rand(k * 50 + i) * 7).toFixed(1) + "px");
+      bot.unshift(x + " calc(100% - " + (rand(k * 50 + i + 999) * 8).toFixed(1) + "px)");
+    }
+    el.style.clipPath = "polygon(" + top.concat(bot).join(",") + ")";
+  });
+
+  // Nav: frosted bar after scrolling, current-section highlight, mobile menu.
+  var bar = document.getElementById("top-bar");
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
+  function onScroll() {
+    bar.classList.toggle("scrolled", window.scrollY > 40);
+    var cur = null;
+    links.forEach(function (a) { var s = document.querySelector(a.getAttribute("href")); if (s && s.getBoundingClientRect().top < 160) cur = a; });
+    links.forEach(function (a) { a.classList.toggle("on", a === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  var menuBtn = document.getElementById("menu-btn"), nav = document.getElementById("nav");
+  menuBtn.addEventListener("click", function () { var o = nav.classList.toggle("open"); menuBtn.setAttribute("aria-expanded", o); });
+  links.forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }); });
+
+  // Polaroid 1: an illustrative spatial map of a tumour section, one dot per segmented cell.
+  var sp = document.getElementById("spatial"), x = sp.getContext("2d"), W = sp.width, H = sp.height;
+  x.fillStyle = "#1F2A2E"; x.fillRect(0, 0, W, H);
+  var nests = [[300, 300, 150], [560, 250, 105], [470, 560, 135], [200, 640, 85], [660, 690, 70]];
+  var vessels = [[[60, 470], [230, 440], [380, 430]], [[600, 420], [700, 470], [790, 520]], [[330, 820], [380, 760], [420, 700]]];
+  function tumourness(px, py) {
+    var f = 0;
+    nests.forEach(function (n) { var dx = px - n[0], dy = py - n[1]; f += Math.exp(-(dx * dx + dy * dy) / (2 * n[2] * n[2] * 0.45)); });
+    return f + (Math.sin(px * 0.031) * Math.cos(py * 0.027)) * 0.08;
+  }
+  var COL = { tumour: "#EE9A55", tumour2: "#D46F48", tcell: "#9EC3DE", macro: "#F0A7B4", caf: "#A9C192", vessel: "#C2413A", other: "#5E6E73" };
+  var sd = 7;
+  for (var gy = 8; gy < H; gy += 14) for (var gx = 8; gx < W; gx += 14) {
+    var px = gx + (rand(sd++) - 0.5) * 9, py = gy + (rand(sd++) - 0.5) * 9, f = tumourness(px, py), q = rand(sd++), col;
+    if (f > 0.62) col = q < 0.88 ? (q < 0.55 ? COL.tumour : COL.tumour2) : (q < 0.95 ? COL.tcell : COL.macro);
+    else if (f > 0.36) col = q < 0.38 ? COL.tcell : q < 0.66 ? COL.macro : q < 0.86 ? COL.caf : COL.tumour2;
+    else col = q < 0.3 ? COL.caf : q < 0.36 ? COL.macro : q < 0.4 ? COL.tcell : q < 0.55 ? COL.other : null;
+    if (!col) continue;
+    x.fillStyle = col; x.globalAlpha = f > 0.62 ? 0.95 : f > 0.36 ? 0.9 : 0.5;
+    x.beginPath(); x.ellipse(px, py, 5.2 + rand(sd++) * 1.6, 4.4 + rand(sd++) * 1.4, rand(sd++) * 3, 0, 6.283); x.fill();
+  }
+  x.globalAlpha = 1; x.strokeStyle = COL.vessel; x.lineCap = "round"; x.lineWidth = 11;
+  vessels.forEach(function (v) { x.beginPath(); x.moveTo(v[0][0], v[0][1]); x.quadraticCurveTo(v[1][0], v[1][1], v[2][0], v[2][1]); x.stroke(); });
+  x.fillStyle = "rgba(20, 26, 28, .78)"; x.fillRect(0, 790, W, 90);
+  x.font = "600 24px 'Source Sans 3', sans-serif";
+  [["tumour", COL.tumour], ["T cell", COL.tcell], ["macrophage", COL.macro], ["fibroblast", COL.caf], ["vessel", COL.vessel]].reduce(function (lx, it) {
+    x.fillStyle = it[1]; x.beginPath(); x.arc(lx + 9, 836, 9, 0, 6.283); x.fill();
+    x.fillStyle = "#E6D3BB"; x.fillText(it[0], lx + 26, 844); return lx + 40 + x.measureText(it[0]).width;
+  }, 34);
+
+  // Polaroid 2: an illustrative single-cell map.
+  var cv = document.getElementById("umap"), g = cv.getContext("2d");
+  g.fillStyle = "#26302F"; g.fillRect(0, 0, cv.width, cv.height);
+  var clusters = [
+    { x: 300, y: 320, sx: 90, sy: 70, n: 900, col: "#EE9A55" },
+    { x: 520, y: 260, sx: 70, sy: 90, n: 650, col: "#D46F48" },
+    { x: 560, y: 560, sx: 80, sy: 60, n: 600, col: "#9EB8C9" },
+    { x: 300, y: 620, sx: 70, sy: 55, n: 500, col: "#F0C58A" },
+    { x: 180, y: 470, sx: 40, sy: 40, n: 240, col: "#B5CDA0" },
+    { x: 650, y: 410, sx: 35, sy: 45, n: 200, col: "#F0D2C8" }
+  ];
+  var s = 1;
+  function nrm() { var u = rand(s++) || 1e-6, v = rand(s++); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  clusters.forEach(function (k) {
+    g.fillStyle = k.col; g.globalAlpha = 0.75;
+    for (var i = 0; i < k.n; i++) { g.beginPath(); g.arc(k.x + nrm() * k.sx * 0.55, k.y + nrm() * k.sy * 0.55, 4.2, 0, 6.283); g.fill(); }
+  });
+  g.globalAlpha = 1; g.fillStyle = "#E6D3BB"; g.font = "600 28px 'Source Sans 3', sans-serif";
+  g.fillText("UMAP 1  →", 40, 840);
+
+  // Story carousel arrows.
+  var car = document.getElementById("carousel");
+  function slide(d) { car.scrollBy({ left: d * (car.clientWidth * 0.8), behavior: "smooth" }); }
+  document.getElementById("prev").addEventListener("click", function () { slide(-1); });
+  document.getElementById("next").addEventListener("click", function () { slide(1); });
+
+  // Copy email.
+  var btn = document.getElementById("copy");
+  btn.addEventListener("click", function () {
+    var mail = document.getElementById("email");
+    function done(m) { btn.textContent = m; setTimeout(function () { btn.textContent = "Copy"; }, 1800); }
+    function fallback() { var rg = document.createRange(); rg.selectNodeContents(mail); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rg); done("Selected"); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(mail.textContent).then(function () { done("Copied"); }, fallback);
+    else fallback();
+  });
+})();
+</script>
+</body>
+</html>
